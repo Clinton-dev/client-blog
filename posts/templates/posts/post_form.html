@@ -6,11 +6,31 @@
 <div class="container">
     <a href="{% url 'home'%}" class="btn btn-dark mb-3">Back</a>
 
-    <div class="card p-4">
-        <form method="post" enctype="multipart/form-data">
+    <div class="layout__body card p-4">
+        <form class="form" action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {{form | crispy}}
-            <button class="btn btn-dark" type="submit">submit</button>
+
+            {{form.title | as_crispy_field}}
+
+            {{form.description | as_crispy_field}}
+
+            {{form.image | as_crispy_field}}
+
+            <div class="form__group">
+                <label for="post_tag">Enter a Tag</label>
+                <input required type="text" value="{{post.tag.name}}" name="tag" list="tag-list" />
+                <datalist id="tag-list">
+                    <select id="post_tag">
+                        {% for tag in tags %}
+                        <option value="{{tag.name}}">{{tag.name}}</option>
+                        {% endfor %}
+                    </select>
+                </datalist>
+            </div>
+
+            <div class="my-3">
+                <button class="btn btn-dark" type="submit">Submit</button>
+            </div>
         </form>
     </div>
 </div>

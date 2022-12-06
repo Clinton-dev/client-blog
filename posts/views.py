@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator
 from .models import Post, Comment, Tag
-from .forms import CommentForm
+from .forms import CommentForm, PostForm
 
 
 def getPopularPosts():
@@ -44,7 +44,7 @@ def index(request):
 
 class PostCreateView(SuccessMessageMixin, CreateView):
     model = Post
-    fields = ["title", "description", "image", "tags"]
+    form_class = PostForm
     success_url = reverse_lazy("home")
     success_message = "Blog post created successfully!"
 
@@ -58,9 +58,12 @@ class PostCreateView(SuccessMessageMixin, CreateView):
         form = self.get_form(form_class)
 
         if form.is_valid():
+            tag_name = request.POST.get("tag")
             post = form.save(commit=False)
             post.author = request.user
             post.save()
+            tag, created = Tag.objects.get_or_create(name=tag_name)
+            post.tags.add(tag)
             title = form.cleaned_data.get("title")
 
             messages.success(
@@ -93,6 +96,28 @@ class PostUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).filter(author=self.request.user)
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        if form.is_valid():
+            tag_name = request.POST.get("tag")
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            tag, created = Tag.objects.get_or_create(name=tag_name)
+            post.tags.add(tag)
+            form.save()
+            messages.success(
+                request,
+                f"Post was updated successfully!",
+            )
+            return redirect("home")
+        else:
+            print("form not valid")
+
+        return render(request, "posts/post_form.html", {"form": form})
 
 
 class PostDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
