@@ -1,0 +1,30 @@
+{% extends 'posts/base1.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<div class="container">
+    <a href="{% url 'home'%}" class="btn btn-dark mb-3">Back</a>
+
+    <div class="card p-4">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form | crispy}}
+            <button class="btn btn-dark" type="submit">submit</button>
+        </form>
+    </div>
+</div>
+
+<!-- <div class="form-group">
+    <label for="room_topic">Tag: </label>
+    <input type="text" name="tag" id="room_topic" list="tag-list" />
+    <datalist id="tag-list">
+        <select id="room_topic">
+            {% for tag in tags %}
+            <option value="{{tag.name}}">{{tag.name}}</option>
+            {% endfor %}
+        </select>
+    </datalist>
+</div> -->
+
+{% endblock content%}

@@ -1,0 +1,77 @@
+{% extends 'posts/base1.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content%}
+<div class="container">
+    <a href="{% url 'home'%}" class="btn btn-dark mb-3 ms-4">Home</a>
+
+    <div class="card">
+        <img class="card-img-top" src="{{object.image.url}}" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">{{object.title}}, <span class="card-subtitle text-muted">by
+                    {{object.author.username}}</span></h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{object.date_created}}</h6>
+            <p class="card-text">{{object.description}}</p>
+        </div>
+    </div>
+
+    <!-- comments -->
+
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <h6 class="border-bottom border-gray pb-2 mb-0 d-flex justify-content-between">Comments
+            <button class="d-block btn btn-primary" id="comment-btn">Add comment</button>
+        </h6>
+
+        <div class="card my-3 p-3" id="comment-form-card">
+            <form action="{% url 'create-comment' object.id%}" method="post">
+                {% csrf_token %}
+                {{commentForm | crispy}}
+                <button type="submit" class="btn btn-dark">Submit</button>
+            </form>
+        </div>
+
+        <!-- query comments table -->
+        <div class="media text-muted pt-3">
+            <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <!-- loop through comments for particular post otherwise display message -->
+                    {% for comment in comments %}
+                    <p>{{comment.description}}</p>
+                    {% if user.id == comment.post.author.id%}
+                    <a href="{%  url 'comment-delete' comment.id%}">Delete</a>
+                    {% endif %}
+                    {% empty%}
+                    <p>Be the first to comment</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- <small class="d-block text-right mt-3">
+            <a href="#">All suggestions</a>
+        </small> -->
+    </div>
+</div>
+
+</div>
+
+<script>
+    let addCommentBtn = document.getElementById('comment-btn')
+
+    addCommentBtn.addEventListener('click', handleCommentClick)
+
+    function handleCommentClick() {
+        let hide = true
+        document.getElementById(`comment-form-card`).classList.toggle('hidden')
+        if (hide) {
+            addCommentBtn.innerHTML = "Add comment"
+            hide = !hide
+        } else {
+            addCommentBtn.innerHTML = "Hide"
+            hide = !hide
+        }
+    }
+
+</script>
+{% endblock content%}

@@ -1,0 +1,52 @@
+<!-- Introduction menu -->
+<div class="w3-col l4">
+    <!-- About Card -->
+    <div class="w3-card w3-margin w3-margin-top">
+        <div class="w3-container w3-white pt-2">
+            <h4><b> My name is {{user.username}}</b></h4>
+            <p>{{user.profile.about}}</p>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Posts -->
+    <div class="w3-card w3-margin">
+        <div class="w3-container w3-padding">
+            <h4>Popular Posts</h4>
+        </div>
+        <ul class="w3-ul w3-hoverable w3-white">
+            {% for popular_post in popular%}
+            <li class="w3-padding-16 d-flex">
+                <img src="{{popular_post.post.image.url}}" alt="Image" class="w3-left w3-margin-right"
+                    style="width:50px">
+                <div>
+                    <a href="{% url 'post-detail' popular_post.post.id %}"
+                        class="w3-large">{{popular_post.post}}</a><br>
+                    <span>by {{popular_post.post.author.username}}</span>
+                </div>
+            </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+    <hr>
+
+    <!-- Labels / tags -->
+    <div class="w3-card w3-margin">
+        <div class="w3-container w3-padding">
+            <h4>Tags</h4>
+        </div>
+        <div class="w3-container w3-white">
+            <p><a href="{% url 'home' %}" class="w3-tag w3-black w3-margin-bottom">All</a>
+                {% for tag in tags %}
+                <a href="{% url 'home' %}?q={{tag.name}}"
+                    class="w3-tag w3-light-grey w3-small w3-margin-bottom">{{tag.name}}</a>
+                {% empty %}
+                no tags yet
+                {% endfor %}
+            </p>
+        </div>
+    </div>
+
+    <!-- END Introduction Menu -->
+</div>
