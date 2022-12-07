@@ -90,9 +90,7 @@ class PostDetailView(DetailView):
 
 class PostUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Post
-    fields = ["title", "description", "image", "tags"]
-    success_url = reverse_lazy("home")  # redirect to individual blog post page
-    success_message = "Blog post updated successfully!"
+    form_class = PostForm
 
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).filter(author=self.request.user)
