@@ -1,6 +1,4 @@
 # client-blog
-
-# Insta-clone
 A blog application where the users can:
 
 1. Sign in to the application to start using.
@@ -30,7 +28,7 @@ Django requires Python and you can install python for your specific operating sy
 
 ## Deployment
 
-Follow this resource if you want to deploy the app [deployment](https://github.com/bernie-haxx/Deployment_to_heroku_django)
+Follow this resource if you want to deploy the app [deployment](https://youtu.be/lKt12SuGxhQ)
 
 ## Built With
 
